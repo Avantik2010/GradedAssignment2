@@ -1,77 +1,77 @@
 package gl;
 
-import java.util.Deque;
-
-import java.util.LinkedList;
-
-public class RightTree {
+import java.io.*;
 	
-	Deque<Node> queue = new LinkedList<Node>();
-	
-	static class Node{
-	int key;
+  class Node{
+	int val;
 	Node left, right;
-	};
 	
-	static Node newNode(int data) {
-		Node temp = new Node();
-		temp.key = data;
-		temp.left= null;
-		temp.right= null;
-		return temp;
+	 Node (int data) 
+	 {
+		val=data;
+		left=right=null;
+		
 	}
-	
-
-	Node insertNode(Node root, int key) 
+	}
+  
+  class RightTree
+  
+  {
+       public static Node node;
+       static Node prevNode =null;
+       static Node headNode =null;
+       
+       static void flattenBTTSkewed(Node root, int order)
 	{
-		// Create a new nodeNode 
-		Node newNode = newNode(key);
 		
 		if (root == null) 
 		{
-			root = newNode;
-			queue.add(root);
-		return root;
-		} else{
-			Node node;node = queue.remove();
-		System.out.println("parent is: " + node.key);
-		if (node.left == null){
-			node.left = newNode;
-		queue.add(node.left);
-		queue.addFirst(node);
-		return root;
+		return;
+		} 
 		
+		
+		if (order>0)
+		{
+			flattenBTTSkewed (root.right , order);
+			
 		}
-		else if (node.right == null)
+		else {
+			flattenBTTSkewed (root.left, order);
+		}
+		
+		Node rightNode = root.right;
+		Node leftNode = root.left;
+		
+		if (headNode == null){
+			headNode =root;
+			root.left =null;
+			prevNode=root;
+				
+		}
+		else 
 		{
 			
-			node.right = newNode;
-		queue.add(node.right);
-		return root;
-		
+			prevNode.right=root;
+			
+			root.left= null;
+			prevNode=root;
 		
 		}
-		}
-		return root;
+		
+	if(order>0) {
+		flattenBTTSkewed(leftNode, order);
 	}
-
-	
-	static void Inorder(Node root)
+	else
 	{
-		if (root==null)
-			return;
-		else {
-			Inorder(root.right);
-			System.out.println(root.key +" ");
-			Inorder(root.left);
-		}
+		flattenBTTSkewed(rightNode , order);
 	}
-
-	static void rightNode(Node root) {
+	}
+	
+		static void rightNode(Node root) {
 		 if (root == null)
 			 return;
 		 else {
-			 System.out.print(root.key +" " );
+			 System.out.print(root.val +" " );
 			 
 			 rightNode(root.right);
 			
@@ -80,19 +80,19 @@ public class RightTree {
 	
 	public static void main(String[] args) {
 		
-		
-		Node root= null;
-		
 		RightTree tree = new RightTree();
 		
-		tree.root = new Node(50);
-	    tree.root.left = new Node(30);
-	    tree.root.right = new Node(10);
-	    tree.root.left.left= new Node(60);
-	    tree.root.right.left= new Node(55);
-	     Inorder(root);
-	     rightNode(root);
-	     System.out .println("\n right skewed tree values are:");
+		tree.node = new Node(50);
+	    tree.node.left = new Node(30);
+	    tree.node.right = new Node(10);
+	    tree.node.left.left= new Node(60);
+	    tree.node.right.left= new Node(55);
+	    
+	    int order =0;
+	    
+	    flattenBTTSkewed(node, order);
+	     rightNode(headNode);
+	   
 	   
 	}  	   
 }
